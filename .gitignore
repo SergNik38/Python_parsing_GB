@@ -220,8 +220,4 @@ fabric.properties
 # Local History for Visual Studio Code
 .history/
 
-# geekshop --->
-
-tmp
-
-# <--- geekshop
+.DS_Store
