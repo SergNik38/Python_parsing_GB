@@ -16,15 +16,17 @@ job = input("Введите название вакансии: ")
 
 client = MongoClient("localhost", 27017)
 db = client["jobs_database"]
+hh = db.headhunter
+sj = db.superjob
+last_page = 1
 
 
 def hh_search():
-    hh = db.headhunter
     url = f"https://hh.ru/vacancies/{job.strip()}"
     r = requests.get(url=url, headers=headers)
     soup = BeautifulSoup(r.text, "lxml")
     div = soup.find("div", class_="pager")
-    last_page = int(div.find_all("span", class_="")[-2].text)
+    # last_page = int(div.find_all("span", class_="")[-2].text)
     for i in range(0, last_page):
         url = f"https://hh.ru/vacancies/{job.strip()}?page={i}"
 
@@ -81,12 +83,11 @@ def hh_search():
 
 
 def sj_search():
-    sj = db.superjob
     url = f"https://russia.superjob.ru/vacancy/search/?keywords={job.strip()}"
     r = requests.get(url=url, headers=headers)
     soup = BeautifulSoup(r.text, "lxml")
     div = str(soup.find("div", class_="_2G0xv L1p51 bwVVU VsleO e495U _2_kCs _3l5cC"))
-    last_page = int(div.split('<span class="_1BOkc">')[-2].split("</span>")[0]) + 1
+    # last_page = int(div.split('<span class="_1BOkc">')[-2].split("</span>")[0]) + 1
     for i in range(0, last_page):
         url = f"https://russia.superjob.ru/vacancy/search/?keywords={job.strip()}&page={i}"
 
@@ -150,6 +151,29 @@ def sj_search():
                     pass
 
 
+salary = int(input("Введите минимальную зарплату "))
+
+
+def job_search(sal):
+    result = []
+    for doc in hh.find({"salary_min": {"$gte": sal}}):
+        result.append(doc)
+    for doc in hh.find({"salary_max": {"$gte": sal}}):
+        if doc in result:
+            pass
+        else:
+            result.append(doc)
+    for doc in sj.find({"salary_min": {"$gte": sal}}):
+        result.append(doc)
+    for doc in sj.find({"salary_max": {"$gte": sal}}):
+        if doc in result:
+            pass
+        else:
+            result.append(doc)
+    pprint(result)
+
+
 if __name__ == "__main__":
     hh_search()
     sj_search()
+    job_search(salary)
