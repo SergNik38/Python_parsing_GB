@@ -4,7 +4,6 @@ from lxml import html
 import requests
 from pymongo import MongoClient
 from pprint import pprint
-import datetime
 from pymongo.errors import DuplicateKeyError
 
 
