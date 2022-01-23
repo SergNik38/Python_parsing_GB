@@ -221,3 +221,4 @@ fabric.properties
 .history/
 
 .DS_Store
+/scrapy.cfg
