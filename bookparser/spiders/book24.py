@@ -1,16 +1,19 @@
 import scrapy
 from scrapy.http import HtmlResponse
 from bookparser.items import BookparserItem
+from time import sleep
 
 
 class Book24Spider(scrapy.Spider):
     name = 'book24'
     allowed_domains = ['book24.ru']
-    start_urls = ['https://book24.ru/best-price/']
+    page = 1
+    start_urls = [f'https://book24.ru/best-price/']
 
     def parse(self, response: HtmlResponse):
-        next_page = response.xpath('//a[contains(text(), "Вперед")]/@href').get()
-        if next_page:
+        if response.xpath('//a[contains(@class, "product-card__image-link")]/@href').get():
+            self.page += 1
+            next_page = f'{self.start_urls[0]}page-{self.page}/'
             yield response.follow(next_page, callback=self.parse)
         links = response.xpath('//a[contains(@class, "product-card__image-link")]/@href').getall()
         for link in links:
@@ -25,4 +28,3 @@ class Book24Spider(scrapy.Spider):
         url = response.url
         rating = response.xpath('//span[@class="rating-widget__main-text"]/text()').get()
         yield BookparserItem(name=name, author=author, old_price=old_price, price=price, url=url, rating=rating)
-

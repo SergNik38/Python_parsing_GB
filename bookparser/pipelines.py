@@ -15,10 +15,14 @@ class BookparserPipeline:
         self.mongo_base = client['books']
 
     def process_item(self, item, spider):
-        item['name'] = item['name'].split(':')[1:]
-        item['name'] = ':'.join(item['name']).strip()
+        if not item['author']:
+            item['author'] = None
+        name = item['name'].split(':')[1:]
+        name = ':'.join(name).strip()
+        if name:
+            item['name'] = name
         if item['old_price']:
-            item['old_price'] = int(item['old_price'].strip().split(' ')[0])
+            item['old_price'] = int(item['old_price'].strip().replace(u'\xa0', '').split(' ')[0])
         item['price'] = int(item['price'].strip().split(' ')[0])
         item['rating'] = float(item['rating'].strip().replace(',', '.'))
         collection = self.mongo_base[spider.name]
