@@ -12,9 +12,8 @@ class InstaSpider(scrapy.Spider):
     allowed_domains = ['instagram.com']
     start_urls = ['https://www.instagram.com/']
     inst_login_link = 'https://www.instagram.com/accounts/login/ajax/'
-    inst_login = 'raccoonva1era'
-    inst_passw = "#PWD_INSTAGRAM_BROWSER:10:1643803232:AahQACyUyOz+D9RfTKbEnk8SRpMochXvw04caCbvgqtDOrI3uKmJb2lCBZhhqdAf3" \
-                 "RxtMTY4TcfSomPBcBz7Q32Jvcq9NDjTfgf3AUNJ2ps4ykLxK++Sd+YmskrGjphM2oBttsB8ov79qzfVC/+Kcvl7fA=="
+    inst_login = 'Onliskill_udm'
+    inst_passw = "#PWD_INSTAGRAM_BROWSER:10:1643131213:AZZQAGTPs6xfu+lt7ppOoFuIqKbWrZ4VaEX53g+SZCn8PJlFrepy7g4RoBJ9hG8g+yNb2R3TWGMrJek2u4SWHgpXYJPp7CijVJirea6j+tAGshfXR9HonVrpXtM9HF0oH+v2RlGNdeDqkBSgLuKb"
     user_for_parse = ['transsibgrupp_baikal', 'veretennikova1661']
 
     def parse(self, response: HtmlResponse):
